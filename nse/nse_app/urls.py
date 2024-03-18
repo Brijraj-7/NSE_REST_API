@@ -9,7 +9,7 @@ from .views import (
     FilterIndexPriceView,
     FiltersIndexPriceView,
     IndexesIndexView,
-    indexesDetailView
+    IndexesDelateView
     )
 
 router = DefaultRouter()
@@ -21,7 +21,7 @@ urlpatterns = [
     path('csvupload/', csvupload, name='csvupload'),
     path('index/<int:num>/', FristFiveIndexView.as_view(), name='first_five_index'),
     path('indexes/<int:pk>/<int:id>', IndexesIndexView.as_view(), name= 'indexes_name_index_data' ),
-    path('indexesdelete/<int:pk>/', indexesDetailView.as_view(), name='indexes-detate'),
+    path('indexes/<int:pk>/', IndexesDelateView.as_view(), name='indexes-delete'),
     path('date/<str:date>/', IndexPriceByDateView.as_view(), name='index_price_by_date'),   
     path('filter/<str:field>/', FilterIndexPriceView.as_view(), name='filter_index_price'),
     path('fld/<str:fields>/', FiltersIndexPriceView.as_view(), name='filter_index_price'),

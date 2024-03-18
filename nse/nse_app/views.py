@@ -1,3 +1,4 @@
+from django.http import Http404
 from rest_framework import viewsets
 from .models import Index, IndexPrice
 from .serializers import IndexSerializer, IndexPriceSerializer
@@ -63,16 +64,43 @@ class IndexesIndexView(APIView):
 
 #--------------------------------------------------------------------------------------------------------------------------------
 # delete indexes
-
-class indexesDetailView(APIView):
-    def delete(self, resquest, pk):
-        try:
-            indexes = Index.objects.get(pk=pk)
-        except Index.DoesNotExist:
-            return Response({"error": "No indexes found for the specified index"}, status=status.HTTP_404_NOT_FOUND)
         
-        indexes.delete()
-        return Response({'message': 'indexes successfully Delete.'}, status=status.HTTP_201_CREATED)
+class IndexesDelateView(APIView):
+    def get_object(self, pk):
+        try:
+            return Index.objects.get(pk=pk)
+        except Index.DoesNotExist:
+            return Response({"error": "Index not found."}, status=status.HTTP_404_NOT_FOUND) 
+
+    def get(self, request, pk, format=None):
+        try:
+            indexes = self.get_object(pk)
+            serializer = IndexSerializer(indexes)
+            return Response(serializer.data)
+        
+        except Index.DoesNotExist:
+            return Response({"error": "Index not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def delete(self, request, pk, format=None):
+        try:
+            indexes = self.get_object(pk)
+            indexes.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Http404:
+            return Response({"error": "Index not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# class indexesDetailView(APIView):
+#     def delete(self, resquest, pk):
+#         try:
+#             indexes = Index.objects.get(pk=pk)
+#         except Index.DoesNotExist:
+#             return Response({"error": "No indexes found for the specified index"}, status=status.HTTP_404_NOT_FOUND)  
+#         indexes.delete()
+#         return Response({'message': 'indexes successfully Delete.'}, status=status.HTTP_201_CREATED)
 
 #--------------------------------------------------------------------------------------------------------------------------------
 # Support operations specific to each index, including fetching prices for specific dates
