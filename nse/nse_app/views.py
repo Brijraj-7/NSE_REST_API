@@ -72,7 +72,7 @@ class IndexesDelateView(APIView):
         except Index.DoesNotExist:
             return Response({"error": "Index not found."}, status=status.HTTP_404_NOT_FOUND) 
 
-    def get(self, request, pk, format=None):
+    def get(self, request, pk):
         try:
             indexes = self.get_object(pk)
             serializer = IndexSerializer(indexes)
@@ -83,7 +83,7 @@ class IndexesDelateView(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def delete(self, request, pk, format=None):
+    def delete(self, request, pk):
         try:
             indexes = self.get_object(pk)
             indexes.delete()
