@@ -20,9 +20,9 @@ urlpatterns = [
     path('', include(router.urls)),
     path('csvupload/', csvupload, name='csvupload'),
     path('index/<int:num>/', FristFiveIndexView.as_view(), name='first_five_index'),
-    path('indexname/<str:name>/date/<str:date>', IndexesIndexView.as_view(), name= 'indexes_name_index_data' ),
-    path('indexesdelete/<int:pk>/', indexesDetailView.as_view(), name='company-detail'),
-    path('date/<str:date>/', IndexPriceByDateView.as_view(), name='index_price_by_date'),
+    path('indexes/<int:pk>/<int:id>', IndexesIndexView.as_view(), name= 'indexes_name_index_data' ),
+    path('indexesdelete/<int:pk>/', indexesDetailView.as_view(), name='indexes-detate'),
+    path('date/<str:date>/', IndexPriceByDateView.as_view(), name='index_price_by_date'),   
     path('filter/<str:field>/', FilterIndexPriceView.as_view(), name='filter_index_price'),
     path('fld/<str:fields>/', FiltersIndexPriceView.as_view(), name='filter_index_price'),
 ]

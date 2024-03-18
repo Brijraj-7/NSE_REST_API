@@ -1,3 +1,4 @@
+from argparse import ArgumentError
 import os
 import csv
 import logging
@@ -9,19 +10,22 @@ logger = logging.getLogger(__name__)
 class Command(BaseCommand):
     help = 'Import data from a CSV file'
 
+    INDEX_NAME_CHOICES = ['NIFTY 50', 'NIFTY 100', 'NIFTY 200', 'NIFTY NEXT 50', 'NIFTY NEXT 50',]
+
     def add_arguments(self, parser):
         parser.add_argument('file_path', type=str)
+        parser.add_argument('index_name', type=str, choices=self.INDEX_NAME_CHOICES)
 
     def handle(self, *args, **options):
         file_path = options['file_path']
-        index_name = os.path.basename(file_path).split('-')[0]  
+        index_name = options['index_name']
 
         index, created = Index.objects.get_or_create(name=index_name)
         
-        # try:
-        with open(file_path, 'r') as file_open:
+        try:
+            with open(file_path, 'r') as file_open:
                 reader = csv.reader(file_open)
-                next(reader)  # Skip the header row
+                next(reader) 
                 for row in reader:
                     index_date, index_open, index_high, index_low, index_close, index_sharestraded, index_turnover = row
                     index_open, index_high, index_low, index_close = map(lambda x: round(float(x), 2), [index_open, index_high, index_low, index_close])
@@ -43,7 +47,9 @@ class Command(BaseCommand):
                         self.stdout.write(self.style.SUCCESS(f'Successfully imported data for {index_name} on {index_date}'))
                     else:
                         self.stdout.write(self.style.WARNING(f'Data for {index_name} on {index_date} already exists'))
-        # except FileNotFoundError:
-        #     logger.error(f"File not found: {file_path}")
-        # except Exception as e:
-        #     logger.error(f"An error occurred: {str(e)}")
+        except FileNotFoundError:
+            logger.error(f"File not found: {file_path}")
+        except ArgumentError as e:
+            logger.error(f"Invalid argument: {str(e)}. Choose from: {', '.join(self.INDEX_NAME_CHOICES)}")
+        except Exception as e:
+            logger.error(f"An error occurred: {str(e)}")

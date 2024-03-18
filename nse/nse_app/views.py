@@ -42,10 +42,10 @@ class FristFiveIndexView(APIView):
 # find by index name and date indexes
 
 class IndexesIndexView(APIView):
-   def get(self, request, name, date):
+   def get(self, request, pk, id):
         try:
-            indexes = Index.objects.filter(name=name)
-            index_price = IndexPrice.objects.filter(date=date)
+            indexes = Index.objects.filter(pk=pk)
+            index_price = IndexPrice.objects.filter(id=id)
             index_serializer = IndexSerializer(indexes, many=True)
             price_serializer = IndexPriceSerializer(index_price, many=True)
             indexes_name = index_serializer.data
@@ -125,7 +125,7 @@ class FilterIndexPriceView(APIView):
         return Response(serializer.data)
 #----------------------------------------------------------------------------------------------------------------------------------
 # Allow users to specify filters in the request payload (e.g., OPEN>2000).
-
+# i am working this APi
 class FiltersIndexPriceView(APIView):
     def get(self, request, fields):
         value = request.query_params.get('value', None)
