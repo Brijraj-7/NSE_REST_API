@@ -1,20 +1,20 @@
 # NSE REST API
 
 ## Overview
-
+    
     This project is a Django-based web application designed to manage National Stock Exchange (NSE) data. It provides functionalities to upload CSV files containing NSE index prices, view, filter, and manage the data through a RESTful API. Additionally, it offers an admin interface for easy data management.
-
+ 
 ## Features
 
-    **CSV Data Upload:** Users can upload CSV files containing NSE index prices data through the provided API endpoint or the admin interface.
+    __CSV Data Upload:__ Users can upload CSV files containing NSE index prices data through the provided API endpoint or the admin interface.
 
-    **API Endpoints:** The application provides RESTful API endpoints to retrieve, filter, and manage NSE index and price data.
+    API Endpoints: The application provides RESTful API endpoints to retrieve, filter, and manage NSE index and price data.
 
-    **Admin Interface:** Built-in Django admin interface for easy management of data.
+    Admin Interface: Built-in Django admin interface for easy management of data.
 
-    **Data Filtering:** Users can filter index prices data based on various parameters like open, high, low, close prices, shares traded, turnover, and date range.
+    Data Filtering: Users can filter index prices data based on various parameters like open, high, low, close prices, shares traded, turnover, and date range.
 
-    **Custom Management Command:** Includes a custom Django management command to import data from a CSV file into the database.
+    Custom Management Command: Includes a custom Django management command to import data from a CSV file into the database.
 
 ## Technologies Used
 
