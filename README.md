@@ -8,15 +8,19 @@
  
 ## Features
 
-    __CSV Data Upload:__ Users can upload CSV files containing NSE index prices data through the provided API endpoint or the admin interface.
+    CSV Data Upload: Users can upload CSV files containing NSE index prices data through 
+    the provided API endpoint or the admin interface.
 
-    API Endpoints: The application provides RESTful API endpoints to retrieve, filter, and manage NSE index and price data.
+    API Endpoints: The application provides RESTful API endpoints to retrieve, filter, 
+    and manage NSE index and price data.
 
     Admin Interface: Built-in Django admin interface for easy management of data.
 
-    Data Filtering: Users can filter index prices data based on various parameters like open, high, low, close prices, shares traded, turnover, and date range.
+    Data Filtering: Users can filter index prices data based on various parameters
+    like open, high, low, close prices, shares traded, turnover, and date range.
 
-    Custom Management Command: Includes a custom Django management command to import data from a CSV file into the database.
+    Custom Management Command: Includes a custom Django management command to 
+    import data from a CSV file into the database.
 
 ## Technologies Used
 
@@ -48,4 +52,5 @@
     python manage.py importdata <file_path> <index_name>
 
     <file_path>: Path to the CSV file.
-    <index_name>: Name of the index for which data is being imported (Choose from: 'NIFTY 50', 'NIFTY 100', 'NIFTY 200', 'NIFTY NEXT 50', 'NIFTY NEXT 50').
+    <index_name>: Name of the index for which data is being imported 
+    (Choose from: 'NIFTY 50', 'NIFTY 100', 'NIFTY 200', 'NIFTY NEXT 50', 'NIFTY NEXT 50').
