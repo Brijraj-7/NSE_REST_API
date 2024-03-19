@@ -8,7 +8,7 @@ class Index(models.Model):
 
 class IndexPrice(models.Model):
     index = models.ForeignKey(Index, on_delete=models.CASCADE)
-    date = models.CharField()  
+    date = models.DateField()  
     open = models.DecimalField(max_digits=10, decimal_places=2)  
     high = models.DecimalField(max_digits=10, decimal_places=2)  
     low = models.DecimalField(max_digits=10, decimal_places=2)  
