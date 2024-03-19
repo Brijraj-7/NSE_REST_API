@@ -2,7 +2,9 @@
 
 ## Overview
     
-    This project is a Django-based web application designed to manage National Stock Exchange (NSE) data. It provides functionalities to upload CSV files containing NSE index prices, view, filter, and manage the data through a RESTful API. Additionally, it offers an admin interface for easy data management.
+    This project is a Django-based web application designed to manage National Stock Exchange (NSE) data.
+    It provides functionalities to upload CSV files containing NSE index prices, view, filter, and manage the      
+    data through a RESTful API. Additionally, it offers an admin interface for easy data management.
  
 ## Features
 
