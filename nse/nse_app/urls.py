@@ -14,5 +14,5 @@ router.register(r'indexprices', views.IndexPriceViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('csvupload/', csvupload, name='csvupload'),
-    path('indexes/<int:pk>/', IndexesIndexView.as_view(), name= 'indexes_name_index_data'),   
+    path('indexes/<int:pk>/', IndexesIndexView.as_view(), name= 'indexes-list'),   
 ]

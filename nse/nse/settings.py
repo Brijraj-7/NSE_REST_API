@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'nse.wsgi.application'
 DATABASES = {  
     'default': {  
         'ENGINE': 'django.db.backends.postgresql',  
-        'NAME': 'csvuplode',  
+        'NAME': 'nsedata',  
         'USER':'postgres',  
         'PASSWORD':'brij2510',  
         'HOST':'127.0.0.1',  
@@ -135,3 +135,58 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 IMPORT_EXPORT_USE_TRANSACTIONS = True       
+
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/debug.log'),  
+            'formatter': 'simple',  
+        },
+        'error': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/error.log'), 
+            'formatter': 'simple', 
+        },
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',  
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'], 
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'nse_app': {
+            'handlers': ['file', 'console'],  
+            'level': 'DEBUG',
+        },
+        'django.request': {
+            'handlers': ['error'],  
+            'level': 'ERROR',
+            'propagate': True,  
+        },
+    },
+}

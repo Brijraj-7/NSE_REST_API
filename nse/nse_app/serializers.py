@@ -10,6 +10,3 @@ class IndexPriceSerializer(serializers.ModelSerializer):
     class Meta:
         model = IndexPrice
         fields = '__all__'
-       
-    
-# serializers.py
