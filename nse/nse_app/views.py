@@ -4,9 +4,11 @@ import io
 from datetime import datetime
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.authentication import BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 from .models import Index, IndexPrice
 from .serializers import IndexSerializer, IndexPriceSerializer
 
@@ -19,7 +21,6 @@ logger = logging.getLogger('django')
 logger = logging.getLogger('nse_app')
 logger = logging.getLogger('django.request')
 
-
 def some_view(request): 
     logger.debug('Debug message')
     logger.info('Info message')
@@ -27,14 +28,20 @@ def some_view(request):
     logger.error('An error occurred while processing the request.')
     logger.critical('Critical message')
 
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
 class IndexViewSet(viewsets.ModelViewSet):
     queryset = Index.objects.all()
     serializer_class = IndexSerializer
 
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
 class IndexPriceViewSet(viewsets.ModelViewSet):
     queryset = IndexPrice.objects.all()
     serializer_class = IndexPriceSerializer
 
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
 class IndexesIndexView(APIView):
     parser_classes = (MultiPartParser, FormParser,)
 
@@ -91,13 +98,14 @@ class IndexesIndexView(APIView):
         else:
             return Response({"error": "Index ID is required for GET request."}, status=status.HTTP_400_BAD_REQUEST)
 
-
     def delete(self, request, pk, *args, **kwargs):
         index = self.get_object(pk)
         index.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['POST'])
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def csvupload(request):
     if 'file' not in request.FILES:
         return Response({'error': 'No file provided.'}, status=status.HTTP_400_BAD_REQUEST)

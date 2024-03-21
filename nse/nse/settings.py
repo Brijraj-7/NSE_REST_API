@@ -37,8 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',  # Only one entry for staticfiles is needed
+    'rest_framework_api_key',
     'drf_yasg',
     'rest_framework',
+    'rest_framework.authtoken',
     'import_export',
     'nse_app',
 ]
@@ -134,7 +136,25 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-IMPORT_EXPORT_USE_TRANSACTIONS = True       
+IMPORT_EXPORT_USE_TRANSACTIONS = True     
+
+
+REST_FRAMEWORK = {
+   
+   'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework_api_key.authentication.BearerTokenAuthentication',
+        # llORBKeI.IsFsFOKn5NwBgmgiGoAI2CofaYG0364S
+        
+    ],
+
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.authentication.TokenAuthentication',
+]
+}
 
 import os
 from pathlib import Path
