@@ -1,25 +1,26 @@
 import logging
 import csv
 import io
+import requests
 from datetime import datetime
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.authentication import BasicAuthentication
+from rest_framework.authentication import BasicAuthentication,TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .models import Index, IndexPrice
-from .serializers import IndexSerializer, IndexPriceSerializer
-
-
-
-
+from .serializers import IndexSerializer, IndexPriceSerializer, UserSerializer
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 # logger
 logger = logging.getLogger(__name__)
 logger = logging.getLogger('django')
 logger = logging.getLogger('nse_app')
 logger = logging.getLogger('django.request')
+
 
 def some_view(request): 
     logger.debug('Debug message')
@@ -28,21 +29,37 @@ def some_view(request):
     logger.error('An error occurred while processing the request.')
     logger.critical('Critical message')
 
-@authentication_classes([BasicAuthentication])
+@authentication_classes([BasicAuthentication,TokenAuthentication,JWTAuthentication])
 @permission_classes([IsAuthenticated])
 class IndexViewSet(viewsets.ModelViewSet):
     queryset = Index.objects.all()
     serializer_class = IndexSerializer
 
-@authentication_classes([BasicAuthentication])
+@authentication_classes([BasicAuthentication,TokenAuthentication,JWTAuthentication])
 @permission_classes([IsAuthenticated])
 class IndexPriceViewSet(viewsets.ModelViewSet):
     queryset = IndexPrice.objects.all()
     serializer_class = IndexPriceSerializer
 
-@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
+class CustomAuthToken(APIView):
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response({'status': 403, 'errors': serializer.errors, 'message': 'something went wrong', })
+
+        serializer.save()
+        user = User.objects.get(username=serializer.data['username'])
+        token_obj, _ = Token.objects.get_or_create(user=user)
+        return Response({'status': 200, 'payload': serializer.data, 'token': str(token_obj), 'message': 'your data'})
+
+    
+@authentication_classes([BasicAuthentication, TokenAuthentication,JWTAuthentication])
 @permission_classes([IsAuthenticated])
 class IndexesIndexView(APIView):
+    authentication_classes = [BasicAuthentication,TokenAuthentication,JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser,)
 
     def get_object(self, pk):
@@ -50,7 +67,7 @@ class IndexesIndexView(APIView):
             return Index.objects.get(pk=pk)
         except Index.DoesNotExist:
             return Response({'message': 'indexes not found'}, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def get(self, request, pk=None, *args, **kwargs):
         try:
             if pk:
@@ -104,7 +121,7 @@ class IndexesIndexView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['POST'])
-@authentication_classes([BasicAuthentication])
+@authentication_classes([BasicAuthentication,TokenAuthentication,JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def csvupload(request):
     if 'file' not in request.FILES:

@@ -5,7 +5,7 @@ def main():
     token='ce6a9dd7831999f60020d9fd070cd80efe6e14f9'
 
     headers = {
-    'Authorization': f'Bearer {token}'
+    'Authorization': f'token {token}'
     }
 
     response = requests.get(url, headers=headers)
