@@ -1,6 +1,7 @@
 import logging
 import csv
 import io
+from django.http import HttpResponse
 import requests
 from datetime import datetime
 from rest_framework import viewsets, status
@@ -15,6 +16,8 @@ from .serializers import IndexSerializer, IndexPriceSerializer, UserSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
+from nse_app.tasks import send_mails_func
+
 # logger
 logger = logging.getLogger(__name__)
 logger = logging.getLogger('django')
@@ -41,6 +44,11 @@ class IndexPriceViewSet(viewsets.ModelViewSet):
     queryset = IndexPrice.objects.all()
     serializer_class = IndexPriceSerializer
 
+def send_mail_all(request):
+    send_mails_func.delay("")  
+    return HttpResponse("sent")
+
+
 @permission_classes([IsAuthenticated])
 class CustomAuthToken(APIView):
     def post(self, request):
@@ -53,6 +61,7 @@ class CustomAuthToken(APIView):
         user = User.objects.get(username=serializer.data['username'])
         token_obj, _ = Token.objects.get_or_create(user=user)
         return Response({'status': 200, 'payload': serializer.data, 'token': str(token_obj), 'message': 'your data'})
+
 
     
 @authentication_classes([BasicAuthentication, TokenAuthentication,JWTAuthentication])

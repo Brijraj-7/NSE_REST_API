@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -45,12 +45,14 @@ INSTALLED_APPS = [
     'nse_app',
     'rest_framework_api_key',
     'rest_framework_simplejwt',
+    'django_celery_results',
 ]
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
+
 
 
 MIDDLEWARE = [
@@ -160,6 +162,26 @@ REST_FRAMEWORK = {
     ],
 }
 
+#BEAT SETTINGS
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+# CELERY SETTINGS
+CELERY_BROKER_URL = 'redis://localhost:6379/' 
+CELERY_RESULT_BACKEND = 'django-db'  
+CELERY_ACCEPT_CONTENT = {'application/json'}
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Paris'
+
+# SMTP SETTINGS
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "mbrijraj2510@gmail.com"
+EMAIL_HOST_PASSWORD = "sasm bnfu eruz hnud"
+DEFAULT_FROM_EMAIL = 'Celery <mbrijraj2510@gmail.com>'
+# sasm bnfu eruz hnud
 
 import os
 from pathlib import Path
